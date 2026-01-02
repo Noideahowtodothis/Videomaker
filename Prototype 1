@@ -1,54 +1,60 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My TV Show Sharing Site</title>
-    <style>
-        body { font-family: Arial; padding: 20px; }
-        .video-box { margin-bottom: 20px; }
-        video { width: 400px; border: 1px solid #444; }
-    </style>
+  <meta charset="UTF-8">
+  <title>Video Upload & Viewer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 40px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    input[type="file"] {
+      margin-bottom: 20px;
+    }
+
+    video {
+      width: 80%;
+      max-width: 800px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      display: none;
+    }
+  </style>
 </head>
 <body>
 
-<h1>Share Your Self-Made TV Shows</h1>
+  <h1>Upload & View a Video</h1>
 
-<h3>Upload a Show</h3>
-<form action="/upload" method="post" enctype="multipart/form-data">
-    <input type="file" name="video" accept="video/*" required>
-    <button type="submit">Upload</button>
-</form>
+  <input type="file" id="videoInput" accept="video/*">
 
-<h3>Available Shows</h3>
-<div id="videos"></div>
+  <br><br>
 
-<script>
-fetch("/videos/")
-    .then(() => {
-        // Not needed for basic listing since Express serves files directly,
-        // but we could later expand to a real database.
+  <video id="videoPlayer" controls></video>
+
+  <script>
+    const videoInput = document.getElementById('videoInput');
+    const videoPlayer = document.getElementById('videoPlayer');
+
+    videoInput.addEventListener('change', function () {
+      const file = this.files[0];
+
+      if (file && file.type.startsWith('video/')) {
+        const videoURL = URL.createObjectURL(file);
+        videoPlayer.src = videoURL;
+        videoPlayer.style.display = 'block';
+      } else {
+        alert('Please select a valid video file.');
+        videoPlayer.style.display = 'none';
+      }
     });
-</script>
-
-<!-- Simple static listing -->
-<script>
-fetch("/videos/")
-</script>
-
-<!-- Dynamically list videos -->
-<script>
-async function loadVideos() {
-    const res = await fetch('/videos/');
-    // This doesn't return directory lists by default,
-    // but Express serves them automatically at /videos/<filename>
-
-    // We'll inject links by requesting the folder using a trick (JSON list)
-}
-
-</script>
-
-<p><i>Uploaded videos appear at: http://localhost:3000/videos/filename</i></p>
+  </script>
 
 </body>
 </html>
-
-
