@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My TV Show Sharing Site</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .video-box { margin-bottom: 20px; }
+        video { width: 400px; border: 1px solid #444; }
+    </style>
+</head>
+<body>
+
+<h1>Share Your Self-Made TV Shows</h1>
+
+<h3>Upload a Show</h3>
+<form action="/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="video" accept="video/*" required>
+    <button type="submit">Upload</button>
+</form>
+
+<h3>Available Shows</h3>
+<div id="videos"></div>
+
+<script>
+fetch("/videos/")
+    .then(() => {
+        // Not needed for basic listing since Express serves files directly,
+        // but we could later expand to a real database.
+    });
+</script>
+
+<!-- Simple static listing -->
+<script>
+fetch("/videos/")
+</script>
+
+<!-- Dynamically list videos -->
+<script>
+async function loadVideos() {
+    const res = await fetch('/videos/');
+    // This doesn't return directory lists by default,
+    // but Express serves them automatically at /videos/<filename>
+
+    // We'll inject links by requesting the folder using a trick (JSON list)
+}
+
+</script>
+
+<p><i>Uploaded videos appear at: http://localhost:3000/videos/filename</i></p>
+
+</body>
+</html>
+
+
